@@ -1,0 +1,6 @@
+(C) 2026 Data Abstraction (Pty) Ltd, all rights reserved.
+Required Notice: For commercial licensing, contact info@data.co.za.
+
+These shifted-byte fonts use original Foundry hexadecimal lettering adapted
+from fonts/src/Foundry-alpha.ts. Licensed under PolyForm Noncommercial 1.0.0;
+see LICENSE-Foundry.txt. They contain no Noto outlines.

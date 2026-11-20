@@ -1,0 +1,6 @@
+{
+  "[markdown]": {
+    "editor.fontFamily": "'Foundry Shifted binary Fallback', Consolas, monospace"
+  },
+  "markdown.styles": [".vscode/shifted-binary-preview.css"]
+}

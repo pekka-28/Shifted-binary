@@ -1,0 +1,35 @@
+/* documentation/foundry.css
+   (C) 2026 Data Abstraction (Pty) Ltd, all rights reserved. */
+@font-face { font-family: 'Foundry Shifted binary'; src: url('../fonts/Foundry-ShiftedBinary.otf'); }
+@font-face { font-family: 'Foundry Shifted binary Fallback'; src: url('../fonts/Foundry-ShiftedBinaryFallback.ttf'); }
+:root { color-scheme: light; }
+body { max-width: 850px; margin: 60px auto; padding: 0 24px; font: 19px/1.65 Georgia, serif; color: #29251f; background: #faf8f2; }
+h1, h2, h3 { font-weight: normal; line-height: 1.2; break-after: avoid; }
+h1 { font-size: 42px; border-bottom: 1px solid #7d3424; padding-bottom: 22px; }
+h2 { font-size: 29px; margin-top: 2em; }
+h3 { font-size: 23px; margin-top: 1.5em; }
+a { color: #7d3424; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+nav, footer { font-size: 15px; border-top: 1px solid #bcb4a5; padding-top: 14px; }
+code, pre { font-family: Consolas, 'Foundry Shifted binary Fallback', monospace; font-size: .85em; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 18px; background: #f0ece2; border-left: 2px solid #7d3424; }
+.specimen { font-family: 'Foundry Shifted binary'; font-size: 30px; letter-spacing: 0; }
+table { width: 100%; border-collapse: collapse; font-size: .82em; margin: 12px 0 28px; }
+caption { text-align: left; font-style: italic; margin: 0 0 10px; }
+th, td { text-align: left; vertical-align: top; border-bottom: 1px solid #cfc7b8; padding: 9px 8px; }
+th { border-top: 1px solid #7d3424; }
+.number { text-align: right; font-variant-numeric: tabular-nums; }
+tr, .specimen { break-inside: avoid; }
+.references { font-size: 1em; overflow-wrap: anywhere; }
+.references li { margin-bottom: 12px; }
+footer { margin-top: 48px; }
+td code { overflow-wrap: anywhere; }
+.shifted { font-family: 'Foundry Shifted binary'; font-size: 1.6em; }
+img { display: block; max-width: 100%; height: auto; margin: 1em auto; break-inside: avoid; }
+@page { size: A4; margin: 20mm 18mm; }
+@media print {
+  body { margin: 0; padding: 0; max-width: none; font-size: 10.5pt; background: white; }
+  h1 { font-size: 28pt; } h2 { font-size: 19pt; } h3 { font-size: 14pt; }
+  nav { display: none; } a { color: inherit; }
+  .references a::after { content: ' (' attr(href) ')'; }
+  p { orphans: 3; widows: 3; }
+}

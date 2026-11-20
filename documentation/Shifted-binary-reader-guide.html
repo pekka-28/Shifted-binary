@@ -1,0 +1,110 @@
+<!-- documentation/Shifted-binary-reader-guide.html; generated from Shifted-binary-reader-guide.md -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Shifted binary reader guide – Foundry</title><link rel="stylesheet" href="foundry.css"></head><body>
+<!-- documentation/Shifted-binary-reader-guide.md -->
+<h1 id="shifted-binary-reader-guide-foundry">Shifted binary reader guide – Foundry</h1>
+<pre><code class="language-xml">&lt;message&gt;&lt;text&gt;Hello, world!&amp;#x0A;&lt;/text&gt;&lt;/message&gt;
+</code></pre>
+<p>Open this XML message in your usual editor and its content is immediately recognisable: a greeting followed by a line feed, written here as <code>&amp;#x0A;</code>. You can read it, search it and copy it into a stylesheet. Carrying arbitrary data in the same message is less convenient. XML forbids characters such as NUL, so arbitrary bytes cannot simply be treated as text. Base64, hexadecimal and decimal arrays can carry them, but introduce extra work when you need to inspect or manipulate the data.</p>
+<p>Shifted binary offers another approach: represent those bytes with XML-safe Unicode code points and display their values in hex using a font. Developers and application administrators can then open the document in familiar tools—Notepad, Word, Visual Studio, VS Code or browser fields—and work with its binary fragments as text. This guide shows the representation beneath that display; a hex editor is not required.</p>
+<h2 id="start-with-a-greeting">Start with a greeting</h2>
+<p>Consider <code>Hello, world!\n</code>, where <code>\n</code> means one line-feed byte, <code>0A</code>, rather than a backslash followed by “n”. The letters are familiar, but the terminating byte is normally invisible. <em>Table A greeting</em> shows the same fourteen bytes in canonical shifted form. The final column contains actual shifted code points; without the font, use the hex column to read their values.</p>
+<p><em>Table A greeting</em></p>
+<table>
+<thead>
+<tr>
+<th>Source bytes, hexadecimal</th>
+<th>Shifted UTF-16 code units, hexadecimal</th>
+<th>Shifted display</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>48 65 6C 6C 6F 2C 20 77 6F 72 6C 64 21 0A</code></td>
+<td><code>E148 E165 E16C E16C E16F E12C E120 E177 E16F E172 E16C E164 E121 E10A</code></td>
+<td><code><span class="shifted"></span></code></td>
+</tr>
+</tbody>
+</table>
+<p>The greeting contains fourteen input bytes including the line feed. Shifting changes the value <code>48</code> to U+E148 and <code>0A</code> to U+E10A. Each displayed hex pair is a glyph, not two stored digits. The middle column shows the resulting 16-bit code units; for example, E148 is stored as bytes <code>48 E1</code> in UTF-16LE.</p>
+<h2 id="when-the-message-contains-controls">When the message contains controls</h2>
+<p>A simple protocol might frame <code>Hello</code> with Start of Text (<code>02</code>) and End of Text (<code>03</code>). Those controls cannot appear directly in XML 1.0, even as numeric character references. <em>Table A framed message</em> shows how they can remain visible within the document instead.</p>
+<p><em>Table A framed message</em></p>
+<table>
+<thead>
+<tr>
+<th>Source bytes, hexadecimal</th>
+<th>Shifted UTF-16 code units, hexadecimal</th>
+<th>Shifted display</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>02 48 65 6C 6C 6F 03</code></td>
+<td><code>E102 E148 E165 E16C E16C E16F E103</code></td>
+<td><code><span class="shifted"></span></code></td>
+</tr>
+</tbody>
+</table>
+<p>The XML can contain the shifted value directly:</p>
+<pre><code class="language-xml">&lt;message&gt;&lt;binary&gt;<span class="shifted"></span>&lt;/binary&gt;&lt;/message&gt;
+</code></pre>
+<p>Its byte meaning is <code>02 48 65 6C 6C 6F 03</code>. Opening the document in an editor configured with the font reveals those values in place. Selecting and copying a fragment retains its code points, ready for a search or a stylesheet literal.</p>
+<h2 id="the-representation-and-its-cost">The representation and its cost</h2>
+<p><em>The Unicode Standard</em> [1] defines the text representation beneath the XML. A code point is a position in the Unicode code space; an encoding such as UTF-8 or UTF-16 represents it in bytes, and a font supplies a glyph for displayable characters. XML markup and the values it carries both use that underlying text representation.</p>
+<p>The <strong>Private Use Area (PUA)</strong> is a named block, U+E000–U+F8FF, in the <strong>Unicode Basic Multilingual Plane</strong>. <em>The Unicode Standard</em>, chapter 23 [6], reserves it for meanings agreed between applications rather than assigned by Unicode. This is what makes it suitable for the shiftedBinary convention.</p>
+<p>Canonical shifted binary maps an input byte value <code>b</code>, from 00 to FF, to <code>U+E100 + b</code>. The resulting range U+E100–U+E1FF lies inside the PUA. It is a privately agreed mapping, not a Unicode-assigned binary alphabet.</p>
+<p>Each shifted value occupies two bytes when encoded as UTF-16, or three as UTF-8. Distinguish the input byte value from the bytes used to store its Unicode representation. <em>Table Payload costs</em> compares the alternatives for a large binary value, excluding XML markup and allocation overhead.</p>
+<p><em>Table Payload costs</em></p>
+<table>
+<thead>
+<tr>
+<th>Representation</th>
+<th style="text-align: right;">UTF-8 bytes per source byte</th>
+<th style="text-align: right;">UTF-16 bytes per source byte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base64</td>
+<td style="text-align: right;">About 1.33</td>
+<td style="text-align: right;">About 2.67</td>
+</tr>
+<tr>
+<td>Hexadecimal</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>Decimal array¹</td>
+<td style="text-align: right;">About 3.57</td>
+<td style="text-align: right;">About 7.14</td>
+</tr>
+<tr>
+<td>Canonical shifted binary</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+<p>¹Unpadded decimal values, one separator between values, uniformly distributed bytes.</p>
+<p>UTF-16 suits documents dominated by shifted content. UTF-8 can be smaller when shifted data is only a fragment: with otherwise ASCII content, the break-even point is half the document's code points. Non-ASCII scripts change that balance. In-memory costs follow the runtime, not simply the operating system; .NET strings use UTF-16 on Windows and other platforms.</p>
+<p>The processing benefit is that every shifted value remains a separate, searchable string element. A fragment can be found, sliced or substituted without decoding base64 groups, checking hexadecimal pair alignment or parsing decimal tokens. All these representations can be passed as whole string parameters; shifted binary simplifies working with their byte content. <em>Using shifted binary in XSLT – Foundry</em> [2] shows how.</p>
+<p>Hexadecimal and Base64 carry binary data, but neither gives ordinary string search the same byte-boundary semantics. In hexBinary text, <code>contains('1ABC', 'AB')</code> is true although the bytes are <code>1A BC</code>. A general aligned search in XSLT 1.0 needs extra logic, typically a recursive template that finds a candidate, checks its alignment and continues after an unaligned occurrence. Canonical shifted binary needs no such search machinery: every character boundary is a byte boundary.</p>
+<p>Base64 characters encode groups of six bits rather than individual bytes. An independently encoded fragment is therefore not generally searchable in the encoded whole using <code>contains()</code>; its encoding depends on its alignment within the surrounding bytes. Search requires decoding or equivalent encoding-aware handling. These are processing trade-offs alongside the storage costs in <em>Table Payload costs</em>.</p>
+<h2 id="making-it-visible">Making it visible</h2>
+<p><em>Convenient binary XML encoding</em> [3] references the Unicode proposal <em>Terminal Graphics for Unicode</em> [7] as background to representing byte values visibly. The XML proposal brings representation and presentation together: binary values should remain usable in text documents and be recognisable when those documents are opened. Its private-use mapping provides the starting point for this implementation; it does not imply that Unicode has standardised shifted binary.</p>
+<p>Foundry Shifted binary gives each shifted code point a glyph showing its byte value in hex. The font changes what the reader sees, not the message. It is installed on development and application-management machines; recipients do not need it merely to preserve or process the data.</p>
+<p>Applications differ in how they select a font for a code point missing from the surrounding typeface. <em>Installing shifted binary – Foundry</em> [4] explains the three font files, application settings and supported tools. The related <em>Barcode fonts – Foundry</em> [5] also uses fonts to make data visible, with a separate encoding purpose.</p>
+<h2 id="references">References</h2>
+<ol class="references">
+<li><em>The Unicode Standard, version 17.0, chapter 2: General Structure</em>, <a href="https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-2/">Unicode specification</a>, Unicode Consortium, 2025.</li>
+<li><em>Using shifted binary in XSLT – Foundry</em>, <a href="Using-shifted-binary-in-XSLT.html">SBE-to-FIXML case study</a>, Data Abstraction (Pty) Ltd, 16 November 2026.</li>
+<li><em>Convenient binary XML encoding (DA-TR-351)</em>, <a href="Convenient-binary-XML-encoding.pdf">revised XML encoding proposal</a>, Data Abstraction (Pty) Ltd, revised 17 November 2026.</li>
+<li><em>Installing shifted binary – Foundry</em>, <a href="Installing-shifted-binary.html">installation guide</a>, Data Abstraction (Pty) Ltd, 16 November 2026.</li>
+<li><em>Barcode fonts – Foundry</em>, <a href="https://github.com/pekka-28/Foundry">Foundry repository</a>, Data Abstraction (Pty) Ltd, 16 November 2026.</li>
+<li><em>The Unicode Standard, version 17.0, chapter 23: Special Areas and Format Characters</em>, <a href="https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-23/">Private Use Area definition</a>, Unicode Consortium, 2025.</li>
+<li><em>Terminal Graphics for Unicode</em>, <a href="https://www.columbia.edu/kermit/ftp/ucsterminal/ucsterminal_02.txt">Unicode proposal cited in Convenient binary XML encoding</a>, Frank da Cruz, Kermit Project, Columbia University, October 1998.</li>
+</ol>
+
+<footer>(C) 2026 Data Abstraction (Pty) Ltd, all rights reserved.</footer></body></html>

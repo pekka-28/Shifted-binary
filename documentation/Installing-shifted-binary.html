@@ -1,0 +1,114 @@
+<!-- documentation/Installing-shifted-binary.html; generated from Installing-shifted-binary.md -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Installing shifted binary – Foundry</title><link rel="stylesheet" href="foundry.css"></head><body>
+<!-- documentation/Installing-shifted-binary.md -->
+<h1 id="installing-shifted-binary-foundry">Installing shifted binary – Foundry</h1>
+<p>Opening a shiftedBinary message should reveal its byte values in the editor you already use. The data is Unicode text; readable presentation requires a font that draws those code points and a rendering system that supplies it for missing glyphs.</p>
+<p>This guide is for developers and administrators setting up Windows machines. <em>Shifted binary reader guide – Foundry</em> [1] introduces the representation proposed in <em>Convenient binary XML encoding</em> [2]. The font is needed for readable display, not for preserving the data.</p>
+<h2 id="why-three-fonts">Why three fonts?</h2>
+<p>Windows applications use different text-rendering systems. A font that works when selected directly does not necessarily work as a substitute for missing glyphs in another typeface. <em>Table Font choices</em> explains the files produced to support those paths; all show the same byte values.</p>
+<p><em>Table Font choices</em></p>
+<table>
+<thead>
+<tr>
+<th>Family and file</th>
+<th>Why it exists</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Foundry Shifted binary</strong> — <a href="../fonts/Foundry-ShiftedBinary.otf">OpenType font</a></td>
+<td>The main font for direct selection and embedded browser/document presentation</td>
+</tr>
+<tr>
+<td><strong>Foundry Shifted binary GDI</strong> — <a href="../fonts/Foundry-ShiftedBinaryGDI.ttf">TrueType font</a></td>
+<td>The full font in TrueType form for direct selection in applications using Windows GDI</td>
+</tr>
+<tr>
+<td><strong>Foundry Shifted binary Fallback</strong> — <a href="../fonts/Foundry-ShiftedBinaryFallback.ttf">TrueType fallback font</a></td>
+<td>Only the 256 shifted glyphs, with metrics suited to Windows font associations; supplies those glyphs while the surrounding typeface supplies ordinary text</td>
+</tr>
+</tbody>
+</table>
+<p>All three typefaces map only U+E100–U+E1FF: the 256 shifted-byte values. Their hexadecimal lettering comes from the original Foundry outlines. They contain no ordinary text glyphs; the required <code>.notdef</code> is empty and unmapped. Version 1.500 uses the current Foundry-alpha.ts source. Exact coverage and browser rendering are checked; earlier native-application results below describe the previous version.</p>
+<p>“Font fallback” means selecting another font when the requested typeface has no glyph for a code point. The Fallback font serves that role. Its restricted character coverage lets it take priority for shifted values without replacing the surrounding typeface's letters or punctuation. Installing a font does not configure Windows font linking automatically.</p>
+<h2 id="configure-the-application">Configure the application</h2>
+<p><strong>For the complete Windows setup described here, install all three supplied font files.</strong> They cover different rendering paths: the main OpenType font provides direct and document rendering, the GDI TrueType companion provides direct rendering in legacy applications, and the Fallback TrueType font supplies the private-use glyphs through editor fallback, GDI font linking and EUDC associations. Each application uses the path appropriate to its renderer; installing one file does not configure all of these paths.</p>
+<p>Font installation and font resolution are separate steps. After installing the files, configure the editor font lists and the Windows associations described below. The registry-file generator associates the <strong>Fallback</strong> font with both GDI linking and EUDC; it does not use the full GDI companion for those associations. A machine using only a particular application may need a subset, but installing the complete set is the documented setup for the supported Windows tools.</p>
+<p>Open the required font file in Windows and choose <strong>Install</strong>. Machine-wide associations require <strong>Install for all users</strong> and administrator rights. Restart applications that cache font lists. Keep the supplied <a href="../fonts/LICENSE-Foundry.txt">Foundry font licence</a> and <a href="../fonts/COPYRIGHT-Foundry.txt">copyright notice</a>.</p>
+<p>In VS Code Settings JSON, include the Fallback family with the preferred editor and terminal fonts. These settings are independent:</p>
+<pre><code class="language-json">{
+  &quot;editor.fontFamily&quot;: &quot;'Foundry Shifted binary Fallback', Consolas, monospace&quot;,
+  &quot;terminal.integrated.fontFamily&quot;: &quot;'Foundry Shifted binary Fallback', Consolas, monospace&quot;
+}
+</code></pre>
+<p>In Visual Studio, use <strong>Tools → Options → Environment → Fonts and Colors → Text Editor</strong>, with a composite family such as <code>Cascadia Code, Foundry Shifted binary Fallback</code>.</p>
+<p>VS Code's Markdown preview has its own font selection. This repository includes a <code>markdown.styles</code> setting and a preview stylesheet that loads the Fallback font for U+E100–U+E1FF, including inline examples and code blocks. Open the repository as the workspace to use that setup. The Markdown source editor uses the installed Fallback family. After changing preview styles, run <strong>Markdown: Refresh Preview</strong> from the Command Palette.</p>
+<p>For browser fields, supply the Fallback font through <code>@font-face</code>, limit it to <code>unicode-range: U+E100-E1FF</code>, and put it first in the field's CSS font list. The normal typeface then supplies the remaining characters.</p>
+<h2 id="configure-windows-font-associations">Configure Windows font associations</h2>
+<p><strong>Windows font associations are a separate setup step.</strong> Install <strong>Foundry Shifted binary Fallback</strong> for all users, then run the supplied <a href="../tools/Export-FontAssociations.ps1">registry-file generator</a> on the destination machine, signed in as the user who will use the font:</p>
+<pre><code class="language-powershell">powershell -NoProfile -File .\tools\Export-FontAssociations.ps1
+</code></pre>
+<p>The script creates <code>Install-Foundry-fallback.reg</code> and <code>Restore-font-associations.reg</code> in <code>.cache/font-associations</code>. It reads the existing associations without changing them. Double-click <code>Install-Foundry-fallback.reg</code>, accept the administrator prompt, and confirm Registry Editor's import. Sign out and back in. To undo the update, double-click <code>Restore-font-associations.reg</code>, confirm its import, and sign out and back in again. Keep the pair together: the restore file contains the settings that existed when the update was generated. Generate fresh files on each destination machine: registry imports replace complete font-link lists, so these files include that machine's existing entries. Regenerate them if associations change before import.</p>
+<p>The update adds the Fallback font to the <code>Microsoft Sans Serif</code> and <code>MS Shell Dlg</code> lists under <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontLink\SystemLink</code>, preserving unrelated entries and their order. These GDI links supply shifted glyphs when the application requests those base typefaces [3].</p>
+<p>The same file configures Windows' EUDC association for <strong>Private Use Area</strong> characters, used by Word and Notepad [4]. It sets <code>SystemDefaultEUDCFont</code> under the current user's <code>EUDC\&lt;code-page number&gt;</code> key to the installed Fallback font path. The generated file identifies that user's registry hive explicitly. If an unrelated EUDC font already occupies this association, the generator stops rather than replacing it.</p>
+<p>The number is Windows' <strong>system ANSI code page</strong>, returned by <code>GetACP</code>: the legacy character encoding associated with <strong>Language for non-Unicode programs</strong> in Windows' regional settings [4, 5]. Windows uses that number to choose the EUDC registry branch even for Unicode text. It does not determine the XML document's encoding. Sign out and back in after importing to refresh cached font associations.</p>
+<h2 id="if-the-display-is-wrong">If the display is wrong</h2>
+<p>Boxes indicate that the rendering system is not supplying the shifted glyphs. For applications using Windows fallback, check the installed Fallback font and the Windows associations above. Editors with their own font lists also need the application settings described earlier.</p>
+<p>In Word, also check whether it has switched the shifted text to another typeface, particularly an East Asian assignment such as Yu Gothic (Body Asian). <strong>The shifted characters must use the same assigned typeface as the surrounding text</strong>, with fallback supplying their glyphs.</p>
+<p>To correct a mixed font assignment, select the affected text, enter the intended surrounding typeface in the font-name box and press Enter. For a document intended to use Calibri throughout, select all and enter <code>Calibri</code>.</p>
+<h2 id="supported-tools">Supported tools</h2>
+<p><em>Table Application coverage</em> lists the supported Windows tools and the activities they support. Use the application settings or Windows associations described above.</p>
+<p><em>Table Application coverage</em></p>
+<table>
+<thead>
+<tr>
+<th>Application or path</th>
+<th>Checked support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notepad</td>
+<td>Display after private-use association and restart</td>
+</tr>
+<tr>
+<td>Word</td>
+<td>Display and spacing after correcting the assigned typeface</td>
+</tr>
+<tr>
+<td>MSMQ message viewer</td>
+<td>Supported</td>
+</tr>
+<tr>
+<td>VS Code and Visual Studio 2022</td>
+<td>XML/XSLT display, fragment copy/paste and saved values</td>
+</tr>
+<tr>
+<td>VS Code Markdown</td>
+<td>Source editor, preview tables, inline code and code blocks</td>
+</tr>
+<tr>
+<td>Chrome browser fields</td>
+<td>Input, textarea and editable content; copy/paste and HTTP text/XML/JSON</td>
+</tr>
+<tr>
+<td>Windows Terminal and Console Host</td>
+<td>Display, prompt copy/paste and message command parameters</td>
+</tr>
+<tr>
+<td>VS Code integrated terminal</td>
+<td>Display with its separate fallback setting; message parameters</td>
+</tr>
+</tbody>
+</table>
+<h2 id="references">References</h2>
+<ol class="references">
+<li><em>Shifted binary reader guide – Foundry</em>, <a href="Shifted-binary-reader-guide.html">reader guide</a>, Data Abstraction (Pty) Ltd, 16 November 2026.</li>
+<li><em>Convenient binary XML encoding (DA-TR-351)</em>, <a href="Convenient-binary-XML-encoding.pdf">XML encoding proposal</a>, Data Abstraction (Pty) Ltd, revised 17 November 2026.</li>
+<li><em>Customise font selection with font fallback and font linking</em>, <a href="https://learn.microsoft.com/en-us/globalization/fonts-layout/fonts">Windows font configuration</a>, Microsoft, 16 November 2026.</li>
+<li><em>EUDC</em>, <a href="https://learn.microsoft.com/en-us/windows/win32/intl/eudc">Windows private-use font associations</a>, Microsoft, 30 June 2021.</li>
+<li><em>GetACP function</em>, <a href="https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getacp">system ANSI code page</a>, Microsoft, 22 February 2024.</li>
+</ol>
+
+<footer>(C) 2026 Data Abstraction (Pty) Ltd, all rights reserved.</footer></body></html>

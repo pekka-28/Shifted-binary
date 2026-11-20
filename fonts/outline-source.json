@@ -1,0 +1,9 @@
+{
+  "source": "Foundry/src/Foundry-alpha.ts",
+  "sourceSha256": "90d5b467754b59c90285f4be368b1bd76829e90a5aac4865ddb270be48bb0962",
+  "characters": "0123456789ABCDEF",
+  "drawingFunction": "drawAlpha",
+  "drawingFunctionUnmodified": true,
+  "licence": "PolyForm-Noncommercial-1.0.0",
+  "mappedCharacters": "U+E100–U+E1FF only"
+}

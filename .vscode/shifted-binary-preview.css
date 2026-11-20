@@ -1,0 +1,14 @@
+/* .vscode/shifted-binary-preview.css
+   (C) 2026 Data Abstraction (Pty) Ltd, all rights reserved.
+   Preview uses a web font; the source editor uses the installed Fallback family. */
+@font-face {
+  font-family: 'Foundry Shifted binary Markdown';
+  src: url('../fonts/Foundry-ShiftedBinaryFallback.ttf') format('truetype');
+  unicode-range: U+E100-E1FF;
+}
+body {
+  font-family: 'Foundry Shifted binary Markdown', 'Segoe UI', sans-serif;
+}
+code, code *, pre, pre *, kbd, samp {
+  font-family: 'Foundry Shifted binary Markdown', Consolas, monospace !important;
+}
