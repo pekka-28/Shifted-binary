@@ -1,0 +1,126 @@
+[
+  {
+    "path": ".gitattributes",
+    "sha256": "705FD4D6451A31D36B3DF7DE96F83F30AC976C9B4A6D1E51671D8E2F33E2D0DA"
+  },
+  {
+    "path": "CONTENTS.md",
+    "sha256": "89A4802BB9FAEA73ABB7FB024384EC36E2FDE410A9A27ADE51AF9AF907E219B8"
+  },
+  {
+    "path": "README.md",
+    "sha256": "9704044856A3570415F560EB4B4A32803633EED6C3AB48D203ACE554C4FF99E0"
+  },
+  {
+    "path": ".vscode/settings.json",
+    "sha256": "030BC73ECB4AB9D434D1E1790B826E5C722426F85706FE0120847BB275BD3968"
+  },
+  {
+    "path": ".vscode/shifted-binary-preview.css",
+    "sha256": "142FD127964AE8CC8D2F35CF2C4233D1B0CE369640C2B67986A9F8B8E008CD15"
+  },
+  {
+    "path": "documentation/Convenient-binary-XML-encoding.pdf",
+    "sha256": "7E89AF18A82941B627C70B922CF7F161B1B2C2A0245F6EE49BADA8912932344F"
+  },
+  {
+    "path": "documentation/foundry.css",
+    "sha256": "FC5B6B90CF6788AEE2DA2C363B62A69DEA0467CF1E200EE926A0BA45E3370435"
+  },
+  {
+    "path": "documentation/Installing-shifted-binary.md",
+    "sha256": "FDF9731626FE01F175AD1C7760F0A0260ADA59CDDB14947EC0FCFCBB159240D3"
+  },
+  {
+    "path": "documentation/Installing-shifted-binary.pdf",
+    "sha256": "3FE47DA6FF20EF26C184A72F1A525D17DFDED3537BC0DB8EF54B960ED903085C"
+  },
+  {
+    "path": "documentation/Shifted-binary-reader-guide.md",
+    "sha256": "8A0D6222F3A9785B270D842D13DB4B69D9E149BA973F49A32FB751512D77F68A"
+  },
+  {
+    "path": "documentation/Shifted-binary-reader-guide.pdf",
+    "sha256": "35F890F0E95F50A005441A153D65A48F335839890D1FA34AFC0B2D01BD881978"
+  },
+  {
+    "path": "documentation/Start-here.md",
+    "sha256": "6D136AE54F09FA8D9693B3F3934365EA0B77D6A948070C50FD3EDE1615C9D95C"
+  },
+  {
+    "path": "documentation/Using-shifted-binary-in-XSLT.md",
+    "sha256": "EA5702E48CC1507944CE8F5CF6B0FE9753BA4370E93DFF02AB8CF1616211ED15"
+  },
+  {
+    "path": "documentation/Using-shifted-binary-in-XSLT.pdf",
+    "sha256": "DC9A3F92D0E46818DA019440297B0A77A571E135DFBB2FA89ECAD6573E940888"
+  },
+  {
+    "path": "documentation/references/SBE-to-FIXML-XSLT-case-study bis.zip",
+    "sha256": "0BCCDF392C9F10E808F5766E4E8F8F66779225E8F8536D065AE33A416344B9E8"
+  },
+  {
+    "path": "examples/Using-the-converters.md",
+    "sha256": "B620A61FA43D32CA5D442BAEEA383E8A770D8AEBE2EABD6CDA0EE92193F48374"
+  },
+  {
+    "path": "examples/Using-the-tooling.md",
+    "sha256": "E21E5F499E019003A3DA68E84B287E4912BBEAE4BD18ED1A33744BA904AEFA37"
+  },
+  {
+    "path": "examples/csharp/ShiftedBinary.cs",
+    "sha256": "7899DA35BF9081554175DC8B8D4408D8410BF2C065A5461204353ED5F9587AEE"
+  },
+  {
+    "path": "examples/csharp/ShiftedBinary.csproj",
+    "sha256": "BA38E683903266DB4CBC65FAF5B5C096E6338214C081685DF09DABC7395E475B"
+  },
+  {
+    "path": "examples/typescript/package.json",
+    "sha256": "E918B88BFB1B3CB5BCC94EC3A1BEA33338D8A9FE8C9AC0C2739F44D1F9E665BF"
+  },
+  {
+    "path": "examples/typescript/ShiftedBinary.ts",
+    "sha256": "613DE766AC0D2068DD3ABFED039818728F40DF5778AAF96F1F8E85447A5DBE0D"
+  },
+  {
+    "path": "examples/typescript/tsconfig.json",
+    "sha256": "797275DF37A22605A0C45314F6BD7791CAC9E69FD8C7551D59858EB9598A6102"
+  },
+  {
+    "path": "fonts/COPYRIGHT-Foundry.txt",
+    "sha256": "0215564C89B7B1E64C9ABEB848C970F6ADB2100A4AE412492C7C845BC59AB849"
+  },
+  {
+    "path": "fonts/Foundry-ShiftedBinary.otf",
+    "sha256": "D521FCDEBF74E769F3DA6AE8916758250F784B277D077C26BF6526874EBFAB78"
+  },
+  {
+    "path": "fonts/Foundry-ShiftedBinaryFallback.ttf",
+    "sha256": "330E5BE671032B1D1CAAC217F941BF0712E0DA5C855F64DE2CC142E4A60E0D63"
+  },
+  {
+    "path": "fonts/Foundry-ShiftedBinaryGDI.ttf",
+    "sha256": "59AA306EF852AF5E235F239977526EF329F8FBC7C5EA30BB2C66C9563E8889E3"
+  },
+  {
+    "path": "fonts/LICENSE-Foundry.txt",
+    "sha256": "FFCCA38841ADB694B6F380647E15F17C446A4D1656FED51A1E2041D064C94CC8"
+  },
+  {
+    "path": "fonts/outline-source.json",
+    "sha256": "5F46B02539A095E51257C4218D410B193FC72473C86B16560318F5F835E934D7"
+  },
+  {
+    "path": "Shifted binary/Hex binary.xslt",
+    "sha256": "6F834F52AA8CC2FF0DBDD5FE42F95C6CAD4216D03178C8B448C356AD480A44B0"
+  },
+  {
+    "path": "Shifted binary/Shifted binary.xslt",
+    "sha256": "9748F74BEDFF246712BAB74880244929CF6276069761841AE6284D05D95AF166"
+  },
+  {
+    "path": "tools/Export-FontAssociations.ps1",
+    "sha256": "29110E4C7F8DED0E89599693E381DA443D84345C78E85C28194C10DAB10A19BC"
+  }
+]

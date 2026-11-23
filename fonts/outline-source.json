@@ -1,0 +1,33 @@
+{
+  "source": "Foundry/src/Foundry-sans-design.ts",
+  "sources": {
+    "Foundry-alpha.ts": "0b148513c766607db1c7c0887bef807a0dc4520b1efff6504597d14b742cb57c",
+    "Foundry-caption-path.ts": "96dd48085eff9212bc57c2b49c43f57cd7d472f3db7ff7aa0cae6199721553eb",
+    "Foundry-caption-rounded.ts": "40dcaf2f483920e7db44d3108eafcd5b673a0716722b7941bec877050a1f5428",
+    "Foundry-sans-construction.ts": "aa9ae4d192f1ad6be96a33bb38519d1689caafabc2b79303c7382d942b48d200",
+    "Foundry-sans-curves.ts": "f153106a017b03e61243f8df1b9eb65be8c18ab25b47e98f30ed7265434ca3fc",
+    "Foundry-sans-design.ts": "0edc80da068a02f55d0798043081872aec12eb1bc2bdfcf9da6f037c3242b0c9",
+    "Foundry-sans-dimensions.ts": "911da6113c6b509bd32357629171e098c197cff1d4058d9eda8b93900284e53f"
+  },
+  "characters": "0123456789ABCDEF",
+  "drawingFunction": "drawSans",
+  "monospaced": true,
+  "extraction": {
+    "scale": 1,
+    "slot": 180
+  },
+  "placement": {
+    "scale": 2.6,
+    "slot": 260,
+    "high": [
+      20,
+      340
+    ],
+    "low": [
+      280,
+      0
+    ]
+  },
+  "licence": "PolyForm-Noncommercial-1.0.0",
+  "mappedCharacters": "U+E100–U+E1FF only"
+}
